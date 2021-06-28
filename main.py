@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -34,6 +35,12 @@ def save_credentials():
   website = website_input.get()
   username = username_input.get()
   password = password_input.get()
+  new_data = {
+    website.title(): {
+      "email": username,
+      "password": password
+    }
+  }
 
   if len(username) == 0 or len(password) == 0 or len(website) == 0:
     messagebox.showwarning(title="Oops", message="Please do not leave any fields empty!")
@@ -42,18 +49,27 @@ def save_credentials():
   confirm_credentials = messagebox.askokcancel(title=website, message=f"These are the details entered \nEmail/Username: {username}\nPassword: {password}\nIs it okay to save?")
 
   if confirm_credentials:
-    with open("data.txt", 'a') as data:
-      credentials = f"{website} | {username} | {password}\n"
-      data.write(credentials)
-      website_input.delete(0, END)
-      username_input.delete(0, END)
-      password_input.delete(0, END)
-      website_input.focus()
+    with open("data.json", 'r') as data_file:
+      # Reading old data
+      data = json.load(data_file)
+      # Updating old data with new data
+      data.update(new_data)
+
+    with open("data.json", 'w') as data_file: 
+      # Saving updated data
+      json.dump(data, data_file, indent=4)    
+    
+    website_input.delete(0, END)
+    username_input.delete(0, END)
+    password_input.delete(0, END)
+    website_input.focus()
+
+# ---------------------------- GET CREDENTIALS ------------------------------- #
 
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
-window.title("password Manager")
+window.title("Password Manager by Island Huynh")
 window.config(padx=50, pady=50)
 
 canvas = Canvas(width=200, height=200, highlightthickness=0)
@@ -63,8 +79,8 @@ canvas.grid(column=1, row=0)
 
 website_label = Label(text="Website:")
 website_label.grid(column=0, row=1)
-website_input = Entry(width=60)
-website_input.grid(column=1, row=1, columnspan=2)
+website_input = Entry(width=32)
+website_input.grid(column=1, row=1)
 website_input.focus()
 
 username_label = Label(text="Email/Username:")
@@ -76,6 +92,9 @@ password_label = Label(text="password:")
 password_label.grid(column=0, row=3)
 password_input = Entry(width=32)
 password_input.grid(column=1, row=3)
+
+website_search_button = Button(text="Search", width=22, command=generate_password)
+website_search_button.grid(column=2, row=1)
 
 generate_password_button = Button(text="Generate Password", width=22, command=generate_password)
 generate_password_button.grid(column=2, row=3)
