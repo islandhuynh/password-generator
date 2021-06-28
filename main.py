@@ -86,10 +86,10 @@ def get_credentials():
   except FileNotFoundError:
     messagebox.showwarning(title="Missing Data", message="You have yet to save any credentials")
   except KeyError:
-    messagebox.showwarning(title="Missing Data", message="There are data saved for this website")
+    messagebox.showwarning(title="Missing Data", message=f"There are data saved for {website}")
   else:
-    username_input.insert(0, credentials["email"])
-    password_input.insert(0, credentials["password"])
+    messagebox.showinfo(title="Credentials", message=f"Email: {credentials['email']} \nPassword: {credentials['password']}\nPassword has been saved onto clipboard.")
+    pyperclip.copy(credentials['password'])
 
 # ---------------------------- UI SETUP ------------------------------- #
 
