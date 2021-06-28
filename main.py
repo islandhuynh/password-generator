@@ -4,6 +4,15 @@ from tkinter import *
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
+def save_credentials():
+  with open("data.txt", 'a') as data:
+    credentials = f"{website_input.get()} | {username_input.get()} | {password_input.get()} \n"
+    website_input.delete(0, END)
+    username_input.delete(0, END)
+    password_input.delete(0, END)
+    website_input.focus()
+    data.write(credentials)
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -19,6 +28,7 @@ website_label = Label(text="Website:")
 website_label.grid(column=0, row=1)
 website_input = Entry(width=60)
 website_input.grid(column=1, row=1, columnspan=2)
+website_input.focus()
 
 username_label = Label(text="Email/Username:")
 username_label.grid(column=0, row=2)
@@ -33,7 +43,7 @@ password_input.grid(column=1, row=3)
 generate_password_button = Button(text="Generate Password", width=22)
 generate_password_button.grid(column=2, row=3)
 
-add_cred_button = Button(text="Add", width=42)
+add_cred_button = Button(text="Add", width=42, command=save_credentials)
 add_cred_button.grid(column=1, row=4, columnspan=2)
 
 window.mainloop()
