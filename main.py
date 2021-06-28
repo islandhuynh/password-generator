@@ -1,17 +1,27 @@
 from tkinter import *
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def save_credentials():
-  with open("data.txt", 'a') as data:
-    credentials = f"{website_input.get()} | {username_input.get()} | {password_input.get()} \n"
-    website_input.delete(0, END)
-    username_input.delete(0, END)
-    password_input.delete(0, END)
-    website_input.focus()
-    data.write(credentials)
+  website = website_input.get()
+  username = username_input.get()
+  password = password_input.get()
+
+  confirm_credentials = messagebox.askokcancel(title=website, message=f"These are the details entered \nEmail/Username: {username}\nPassword: {password}\nIs it okay to save?")
+
+  if confirm_credentials:
+    with open("data.txt", 'a') as data:
+      credentials = f"{website} | {username} | {password}\n"
+      data.write(credentials)
+
+  website_input.delete(0, END)
+  username_input.delete(0, END)
+  password_input.delete(0, END)
+  website_input.focus()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
