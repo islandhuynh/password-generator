@@ -11,17 +11,20 @@ def save_credentials():
   username = username_input.get()
   password = password_input.get()
 
+  if len(username) == 0 or len(password) == 0 or len(website) == 0:
+    messagebox.showwarning(title="Oops", message="Please do not leave any fields empty!")
+    return
+
   confirm_credentials = messagebox.askokcancel(title=website, message=f"These are the details entered \nEmail/Username: {username}\nPassword: {password}\nIs it okay to save?")
 
   if confirm_credentials:
     with open("data.txt", 'a') as data:
       credentials = f"{website} | {username} | {password}\n"
       data.write(credentials)
-
-  website_input.delete(0, END)
-  username_input.delete(0, END)
-  password_input.delete(0, END)
-  website_input.focus()
+      website_input.delete(0, END)
+      username_input.delete(0, END)
+      password_input.delete(0, END)
+      website_input.focus()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
