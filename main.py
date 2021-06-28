@@ -73,6 +73,24 @@ def save_credentials():
 
 # ---------------------------- GET CREDENTIALS ------------------------------- #
 
+def get_credentials():
+  website = website_input.get().title()
+  if len(website) == 0:
+    messagebox.showwarning(title="Missing Website Name", message="Please enter a valid website")
+    return
+  
+  try:
+    with open("data.json", "r") as data_file:
+      data = json.load(data_file)
+      credentials = data[website]
+  except FileNotFoundError:
+    messagebox.showwarning(title="Missing Data", message="You have yet to save any credentials")
+  except KeyError:
+    messagebox.showwarning(title="Missing Data", message="There are data saved for this website")
+  else:
+    username_input.insert(0, credentials["email"])
+    password_input.insert(0, credentials["password"])
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -100,7 +118,7 @@ password_label.grid(column=0, row=3)
 password_input = Entry(width=32)
 password_input.grid(column=1, row=3)
 
-website_search_button = Button(text="Search", width=22, command=generate_password)
+website_search_button = Button(text="Search", width=22, command=get_credentials)
 website_search_button.grid(column=2, row=1)
 
 generate_password_button = Button(text="Generate Password", width=22, command=generate_password)
