@@ -49,15 +49,22 @@ def save_credentials():
   confirm_credentials = messagebox.askokcancel(title=website, message=f"These are the details entered \nEmail/Username: {username}\nPassword: {password}\nIs it okay to save?")
 
   if confirm_credentials:
-    with open("data.json", 'r') as data_file:
-      # Reading old data
-      data = json.load(data_file)
-      # Updating old data with new data
-      data.update(new_data)
+    try: 
+      with open("data.json", 'r') as data_file:
+        # Reading old data
+        data = json.load(data_file)
+        # Updating old data with new data
+        data.update(new_data)
 
-    with open("data.json", 'w') as data_file: 
-      # Saving updated data
-      json.dump(data, data_file, indent=4)    
+    except FileNotFoundError:
+        with open("data.json", 'w') as data_file: 
+          # Add new data
+          json.dump(new_data, data_file, indent=4)    
+
+    else: 
+      with open("data.json", 'w') as data_file: 
+        # Saving updated data
+        json.dump(data, data_file, indent=4)    
     
     website_input.delete(0, END)
     username_input.delete(0, END)
